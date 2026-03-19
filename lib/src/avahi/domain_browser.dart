@@ -92,15 +92,15 @@ class AvahiDomainBrowser extends DBusRemoteObject {
   /// Stream of org.freedesktop.Avahi.DomainBrowser.CacheExhausted signals.
   late final Stream<AvahiDomainBrowserCacheExhausted> cacheExhausted;
 
-  AvahiDomainBrowser(DBusClient client, String destination, DBusObjectPath path)
-      : super(client, name: destination, path: path) {
+  AvahiDomainBrowser(super.client, String destination, DBusObjectPath path)
+      : super(name: destination, path: path) {
     itemNew = DBusRemoteObjectSignalStream(
             object: this,
             interface: 'org.freedesktop.Avahi.DomainBrowser',
             name: 'ItemNew',
             signature: DBusSignature('iisu'))
         .asBroadcastStream()
-        .map((signal) => AvahiDomainBrowserItemNew(signal));
+        .map(AvahiDomainBrowserItemNew.new);
 
     itemRemove = DBusRemoteObjectSignalStream(
             object: this,
@@ -108,7 +108,7 @@ class AvahiDomainBrowser extends DBusRemoteObject {
             name: 'ItemRemove',
             signature: DBusSignature('iisu'))
         .asBroadcastStream()
-        .map((signal) => AvahiDomainBrowserItemRemove(signal));
+        .map(AvahiDomainBrowserItemRemove.new);
 
     failure = DBusRemoteObjectSignalStream(
             object: this,
@@ -116,7 +116,7 @@ class AvahiDomainBrowser extends DBusRemoteObject {
             name: 'Failure',
             signature: DBusSignature('s'))
         .asBroadcastStream()
-        .map((signal) => AvahiDomainBrowserFailure(signal));
+        .map(AvahiDomainBrowserFailure.new);
 
     allForNow = DBusRemoteObjectSignalStream(
             object: this,
@@ -124,7 +124,7 @@ class AvahiDomainBrowser extends DBusRemoteObject {
             name: 'AllForNow',
             signature: DBusSignature(''))
         .asBroadcastStream()
-        .map((signal) => AvahiDomainBrowserAllForNow(signal));
+        .map(AvahiDomainBrowserAllForNow.new);
 
     cacheExhausted = DBusRemoteObjectSignalStream(
             object: this,
@@ -132,7 +132,7 @@ class AvahiDomainBrowser extends DBusRemoteObject {
             name: 'CacheExhausted',
             signature: DBusSignature(''))
         .asBroadcastStream()
-        .map((signal) => AvahiDomainBrowserCacheExhausted(signal));
+        .map(AvahiDomainBrowserCacheExhausted.new);
   }
 
   /// Invokes org.freedesktop.DBus.Introspectable.Introspect()

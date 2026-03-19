@@ -47,15 +47,15 @@ class AvahiAddressResolver extends DBusRemoteObject {
   late final Stream<AvahiAddressResolverFailure> failure;
 
   AvahiAddressResolver(
-      DBusClient client, String destination, DBusObjectPath path)
-      : super(client, name: destination, path: path) {
+      super.client, String destination, DBusObjectPath path)
+      : super(name: destination, path: path) {
     found = DBusRemoteObjectSignalStream(
             object: this,
             interface: 'org.freedesktop.Avahi.AddressResolver',
             name: 'Found',
             signature: DBusSignature('iiissu'))
         .asBroadcastStream()
-        .map((signal) => AvahiAddressResolverFound(signal));
+        .map(AvahiAddressResolverFound.new);
 
     failure = DBusRemoteObjectSignalStream(
             object: this,
@@ -63,7 +63,7 @@ class AvahiAddressResolver extends DBusRemoteObject {
             name: 'Failure',
             signature: DBusSignature('s'))
         .asBroadcastStream()
-        .map((signal) => AvahiAddressResolverFailure(signal));
+        .map(AvahiAddressResolverFailure.new);
   }
 
   /// Invokes org.freedesktop.DBus.Introspectable.Introspect()

@@ -1,4 +1,4 @@
-library bonsoir_linux;
+library;
 
 import 'package:bonsoir_linux/src/actions/broadcast.dart';
 import 'package:bonsoir_linux/src/actions/discovery/discovery.dart';

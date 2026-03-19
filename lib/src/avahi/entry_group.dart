@@ -22,15 +22,15 @@ class AvahiEntryGroup extends DBusRemoteObject {
   /// Stream of org.freedesktop.Avahi.EntryGroup.StateChanged signals.
   late final Stream<AvahiEntryGroupStateChanged> stateChanged;
 
-  AvahiEntryGroup(DBusClient client, String destination, DBusObjectPath path)
-      : super(client, name: destination, path: path) {
+  AvahiEntryGroup(super.client, String destination, DBusObjectPath path)
+      : super(name: destination, path: path) {
     stateChanged = DBusRemoteObjectSignalStream(
             object: this,
             interface: 'org.freedesktop.Avahi.EntryGroup',
             name: 'StateChanged',
             signature: DBusSignature('is'))
         .asBroadcastStream()
-        .map((signal) => AvahiEntryGroupStateChanged(signal));
+        .map(AvahiEntryGroupStateChanged.new);
   }
 
   /// Invokes org.freedesktop.DBus.Introspectable.Introspect()
@@ -125,7 +125,7 @@ class AvahiEntryGroup extends DBusRemoteObject {
           DBusString(host),
           DBusUint16(port),
           DBusArray(
-              DBusSignature('ay'), txt.map((child) => DBusArray.byte(child)))
+              DBusSignature('ay'), txt.map(DBusArray.byte))
         ],
         replySignature: DBusSignature(''),
         noAutoStart: noAutoStart,
@@ -170,7 +170,7 @@ class AvahiEntryGroup extends DBusRemoteObject {
           DBusString(type),
           DBusString(domain),
           DBusArray(
-              DBusSignature('ay'), txt.map((child) => DBusArray.byte(child)))
+              DBusSignature('ay'), txt.map(DBusArray.byte))
         ],
         replySignature: DBusSignature(''),
         noAutoStart: noAutoStart,

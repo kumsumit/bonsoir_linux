@@ -10,9 +10,8 @@ import 'package:dbus/dbus.dart';
 class AvahiServerResolvedService extends DBusStruct {
   final List<DBusValue> values;
 
-  AvahiServerResolvedService(Iterable<DBusValue> children)
-      : values = children.toList(),
-        super(children);
+  AvahiServerResolvedService(super.children)
+      : values = children.toList();
 
   int get interface => (values[0] as DBusInt32).value;
 
@@ -65,15 +64,15 @@ class AvahiServer extends DBusRemoteObject {
   /// Stream of org.freedesktop.Avahi.Server.StateChanged signals.
   late final Stream<AvahiServerStateChanged> stateChanged;
 
-  AvahiServer(DBusClient client, String destination, DBusObjectPath path)
-      : super(client, name: destination, path: path) {
+  AvahiServer(super.client, String destination, DBusObjectPath path)
+      : super(name: destination, path: path) {
     stateChanged = DBusRemoteObjectSignalStream(
             object: this,
             interface: 'org.freedesktop.Avahi.Server',
             name: 'StateChanged',
             signature: DBusSignature('is'))
         .asBroadcastStream()
-        .map((signal) => AvahiServerStateChanged(signal));
+        .map(AvahiServerStateChanged.new);
   }
 
   /// Invokes org.freedesktop.DBus.Introspectable.Introspect()

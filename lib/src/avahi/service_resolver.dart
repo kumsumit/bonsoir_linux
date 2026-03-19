@@ -66,15 +66,15 @@ class AvahiServiceResolver extends DBusRemoteObject {
   late final Stream<AvahiServiceResolverFailure> failure;
 
   AvahiServiceResolver(
-      DBusClient client, String destination, DBusObjectPath path)
-      : super(client, name: destination, path: path) {
+      super.client, String destination, DBusObjectPath path)
+      : super(name: destination, path: path) {
     found = DBusRemoteObjectSignalStream(
             object: this,
             interface: 'org.freedesktop.Avahi.ServiceResolver',
             name: 'Found',
             signature: DBusSignature('iissssisqaayu'))
         .asBroadcastStream()
-        .map((signal) => AvahiServiceResolverFound(signal));
+        .map(AvahiServiceResolverFound.new);
 
     failure = DBusRemoteObjectSignalStream(
             object: this,
@@ -82,7 +82,7 @@ class AvahiServiceResolver extends DBusRemoteObject {
             name: 'Failure',
             signature: DBusSignature('s'))
         .asBroadcastStream()
-        .map((signal) => AvahiServiceResolverFailure(signal));
+        .map(AvahiServiceResolverFailure.new);
   }
 
   /// Invokes org.freedesktop.DBus.Introspectable.Introspect()

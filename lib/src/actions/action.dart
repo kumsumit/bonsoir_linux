@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bonsoir_linux/src/error.dart';
 import 'package:bonsoir_platform_interface/bonsoir_platform_interface.dart';
 import 'package:dbus/dbus.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 
 /// Base implementation for [BonsoirAction] on Linux.
 abstract class AvahiBonsoirAction<T extends BonsoirEvent> extends BonsoirAction<T> {
@@ -46,8 +46,8 @@ abstract class AvahiBonsoirAction<T extends BonsoirEvent> extends BonsoirAction<
   bool get isStopped => _isStopped;
 
   /// Triggered when an event occurs.
-  void onEvent(T event, { String? message, List parameters = const [] }) {
-    message ??= logMessages[event.type];
+  void onEvent(T event, {String? message, List parameters = const []}) {
+    message ??= logMessages[event.runtimeType.toString()];
     if (message != null) {
       log(message, parameters: parameters);
     }
@@ -55,7 +55,7 @@ abstract class AvahiBonsoirAction<T extends BonsoirEvent> extends BonsoirAction<
   }
 
   /// Triggered when an error occurs.
-  void onError({ String? message, List parameters = const [], Object? details }) {
+  void onError({String? message, List parameters = const [], Object? details}) {
     message ??= logMessages['${action}Error']!;
     message = _format(message, parameters);
     log(message);
@@ -93,9 +93,9 @@ If you have previously called "AvahiBonsoirDiscovery.stop()" on this instance, y
   }
 
   /// Prints a message to the console, if enabled.
-  void log(String message, { List parameters = const [] }) {
+  void log(String message, {List parameters = const []}) {
     if (printLogs) {
-      print('[$action] ${_format(message, parameters)}');
+      debugPrint('[$action] ${_format(message, parameters)}');
     }
   }
 
@@ -108,4 +108,3 @@ If you have previously called "AvahiBonsoirDiscovery.stop()" on this instance, y
     return result;
   }
 }
-

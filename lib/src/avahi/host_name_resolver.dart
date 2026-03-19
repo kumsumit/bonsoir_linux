@@ -47,15 +47,15 @@ class AvahiHostNameResolver extends DBusRemoteObject {
   late final Stream<AvahiHostNameResolverFailure> failure;
 
   AvahiHostNameResolver(
-      DBusClient client, String destination, DBusObjectPath path)
-      : super(client, name: destination, path: path) {
+      super.client, String destination, DBusObjectPath path)
+      : super(name: destination, path: path) {
     found = DBusRemoteObjectSignalStream(
             object: this,
             interface: 'org.freedesktop.Avahi.HostNameResolver',
             name: 'Found',
             signature: DBusSignature('iisisu'))
         .asBroadcastStream()
-        .map((signal) => AvahiHostNameResolverFound(signal));
+        .map(AvahiHostNameResolverFound.new);
 
     failure = DBusRemoteObjectSignalStream(
             object: this,
@@ -63,7 +63,7 @@ class AvahiHostNameResolver extends DBusRemoteObject {
             name: 'Failure',
             signature: DBusSignature('s'))
         .asBroadcastStream()
-        .map((signal) => AvahiHostNameResolverFailure(signal));
+        .map(AvahiHostNameResolverFailure.new);
   }
 
   /// Invokes org.freedesktop.DBus.Introspectable.Introspect()

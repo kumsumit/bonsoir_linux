@@ -22,14 +22,14 @@ class AvahiServer2 extends DBusRemoteObject {
   /// Stream of org.freedesktop.Avahi.Server2.StateChanged signals.
   late final Stream<AvahiServer2StateChanged> stateChanged;
 
-  AvahiServer2(DBusClient client, String destination, DBusObjectPath path)
-      : super(client, name: destination, path: path) {
+  AvahiServer2(super.client, String destination, DBusObjectPath path)
+      : super(name: destination, path: path) {
     stateChanged = DBusRemoteObjectSignalStream(
             object: this,
             interface: 'org.freedesktop.Avahi.Server2',
             name: 'StateChanged',
             signature: DBusSignature('is'))
-        .map((signal) => AvahiServer2StateChanged(signal));
+        .map(AvahiServer2StateChanged.new);
   }
 
   /// Invokes org.freedesktop.DBus.Introspectable.Introspect()
